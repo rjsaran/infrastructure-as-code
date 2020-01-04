@@ -7,14 +7,24 @@
     ```
     terraform-state-2020-01-01
     ```
+    If duplicate error occurs while creation, choose diffrent bucket name, need to replace terraform-state-2020-01-01 with new bucket name in this directory.
 
-3. Change directory to terraform/live/prod/networking and run following command to create VPC, Public Subnets, Private Subnets, NAT Gateway, Internet Gateway, Route Table & Route Table Associations.
+3. Create AWS Key pair for ssh access.
     ```sh
+    cd terraform/global/key_pair
     terraform init
     terraform plan --var-file=variable.tfvars
     terraform apply --var-file=variable.tfvars
     ```
 
-4. Change directory to prod/data-storage and run above commands to create AWS Elastic Container Registry.
+4. Create VPC, Public Subnets, Private Subnets, NAT Gateway, Internet Gateway, Route Table & Route Table Associations.
+    ```sh
+    cd terraform/live/prod/networking
+    terraform init
+    terraform plan --var-file=variable.tfvars
+    terraform apply --var-file=variable.tfvars
+    ```
 
-5. Change directory to global/key_pair and run terraform commands to create AWS SSH Key Pair.
+5. Change directory to prod/data-storage and run above commands to create AWS Elastic Container Registry.
+
+6. Change directory to global/key_pair and run terraform commands to create AWS SSH Key Pair.
