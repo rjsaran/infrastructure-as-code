@@ -38,6 +38,11 @@
             "execute_command" : "echo 'packer' | sudo -E -S sh '{{ .Path }}'"
         },
         {
+            "type": "file",
+            "source": "{{user `docker_swarm_manager_pub_key`}}",
+            "destination" : "/tmp/docker_swarm_manager_id_rsa.pub"
+        },
+        {
             "type": "ansible-local",
             "playbook_dir": "../../ansible",
             "galaxy_file": "../../ansible/roles/docker-swarm/requirement.yml",
@@ -47,11 +52,6 @@
             "type": "ansible-local",
             "playbook_dir": "../../ansible",
             "playbook_file": "../../ansible/users.yml"
-        },
-        {
-            "type": "file",
-            "source": "{{user `docker_swarm_manager_pub_key`}}",
-            "destination" : "/tmp/docker_swarm_manager_id_rsa.pub"
         },
         {
             "type": "shell",

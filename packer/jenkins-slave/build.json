@@ -37,6 +37,11 @@
             "execute_command" : "echo 'packer' | sudo -E -S sh '{{ .Path }}'"
         },
         {
+            "type" : "file",
+            "source" : "{{user `jenkins_slave_agent_pub_key`}}",
+            "destination" : "/tmp/jenkins_slave_agent_id_rsa.pub"
+        },
+        {
             "type": "ansible-local",
             "playbook_dir": "../../ansible",
             "galaxy_file": "../../ansible/roles/jenkins-slave/requirement.yml",
@@ -46,11 +51,6 @@
             "type": "ansible-local",
             "playbook_dir": "../../ansible",
             "playbook_file": "../../ansible/users.yml"
-        },
-        {
-            "type" : "file",
-            "source" : "{{user `jenkins_slave_agent_pub_key`}}",
-            "destination" : "/tmp/jenkins_slave_agent_id_rsa.pub"
         },
         {
             "type": "shell",
