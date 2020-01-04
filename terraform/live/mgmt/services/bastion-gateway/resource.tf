@@ -19,7 +19,7 @@ data "terraform_remote_state" "key_pair_global" {
     }
 }
 
-data "aws_ami" "bastion" {
+data "aws_ami" "this" {
     most_recent = true
     owners      = ["self"]
 
@@ -40,7 +40,7 @@ module "bastion_gateway" {
     source           = "../../../../modules/services/bastion-gateway"
 
     vpc_id           = local.vpc_id
-    image_id         = data.aws_ami.bastion.image_id
+    image_id         = data.aws_ami.this.image_id
     instance_type    = var.instance_type
     min_size         = var.min_size
     max_size         = var.max_size

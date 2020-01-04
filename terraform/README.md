@@ -25,6 +25,10 @@
     terraform apply --var-file=variable.tfvars
     ```
 
-5. Change directory to prod/data-storage and run above commands to create AWS Elastic Container Registry.
-
-6. Change directory to global/key_pair and run terraform commands to create AWS SSH Key Pair.
+4. Create Bastion instances, ELB, Security Groups.
+    ```sh
+    cd terraform/live/mgmt/services/bastion-gateway
+    terraform init
+    terraform plan --var-file=variable.tfvars
+    terraform apply --var-file=variable.tfvars
+    ```
