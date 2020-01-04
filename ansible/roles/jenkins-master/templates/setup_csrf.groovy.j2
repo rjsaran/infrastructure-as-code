@@ -1,0 +1,10 @@
+import hudson.security.csrf.DefaultCrumbIssuer
+import jenkins.model.Jenkins
+
+def instance = Jenkins.instance
+
+if(instance.getCrumbIssuer() != null) {
+    instance.setCrumbIssuer(null)
+
+    instance.save()
+}

@@ -1,0 +1,62 @@
+{
+    "variables" : {
+        "aws_region" : "{{env `AWS_REGION`}}",
+        "docker_swarm_manager_pub_key": "{{env `DOCKER_SWARM_MANAGER_PUB_KEY`}}"
+    },
+    "builders" : [
+        {
+            "type" : "amazon-ebs",
+            "profile" : "default",
+            "region" : "{{user `aws_region`}}",
+            "instance_type" : "t2.micro",
+            "source_ami" : "{{user `source_ami`}}",
+            "ssh_username" : "ubuntu",
+            "ami_name": "packer-linux-docker-swarm-{{timestamp}}",
+            "ami_description" : "Amazon Linux Image with Docker Swarm Cluster",
+            "source_ami_filter": {
+                "filters": {
+                    "virtualization-type": "hvm",
+                    "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+                    "root-device-type": "ebs"
+                },
+                "owners": ["099720109477"],
+                "most_recent": true
+            },
+            "run_tags": {
+                "Name": "packer-builder-docker-swarm"
+            },
+            "tags": {
+                "Tool": "Packer",
+                "Author" : "Ramjeet Saran"
+            }
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "script": "../scripts/install_ansible.sh",
+            "execute_command" : "echo 'packer' | sudo -E -S sh '{{ .Path }}'"
+        },
+        {
+            "type": "ansible-local",
+            "playbook_dir": "../../ansible",
+            "galaxy_file": "../../ansible/roles/docker-swarm/requirement.yml",
+            "playbook_file": "../../ansible/docker-swarm.yml"
+        },
+        {
+            "type": "ansible-local",
+            "playbook_dir": "../../ansible",
+            "playbook_file": "../../ansible/users.yml"
+        },
+        {
+            "type": "file",
+            "source": "{{user `docker_swarm_manager_pub_key`}}",
+            "destination" : "/tmp/docker_swarm_manager_id_rsa.pub"
+        },
+        {
+            "type": "shell",
+            "script": "../scripts/remove_ansible.sh",
+            "execute_command" : "echo 'packer' | sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}

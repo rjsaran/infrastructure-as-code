@@ -1,0 +1,49 @@
+{
+    "variables" : {
+        "aws_region" : "{{env `AWS_REGION`}}"
+    },
+    "builders" : [
+        {
+            "type" : "amazon-ebs",
+            "profile" : "default",
+            "region" : "{{user `aws_region`}}",
+            "instance_type" : "t2.micro",
+            "source_ami" : "{{user `source_ami`}}",
+            "ssh_username" : "ubuntu",
+            "ami_name": "packer-linux-bastion-{{timestamp}}",
+            "ami_description" : "Amazon Linux Image For Bastion Gateway",
+            "source_ami_filter": {
+                "filters": {
+                    "virtualization-type": "hvm",
+                    "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+                    "root-device-type": "ebs"
+                },
+                "owners": ["099720109477"],
+                "most_recent": true
+            },
+            "run_tags" : {
+                "Name" : "packer-builder-bastion"
+            },
+            "tags" : {
+                "Tool" : "Packer"
+            }
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "script": "../scripts/install_ansible.sh",
+            "execute_command" : "echo 'packer' | sudo -E -S sh '{{ .Path }}'"
+        },
+        {
+            "type": "ansible-local",
+            "playbook_dir": "../../ansible",
+            "playbook_file": "../../ansible/users.yml"
+        },
+        {
+            "type": "shell",
+            "script": "../scripts/remove_ansible.sh",
+            "execute_command" : "echo 'packer' | sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}

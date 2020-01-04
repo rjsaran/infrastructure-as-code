@@ -1,0 +1,4 @@
+# Java role from Ansible Galaxy
+- src: geerlingguy.java
+# Docker role from Ansible Galaxy
+- src: geerlingguy.docker

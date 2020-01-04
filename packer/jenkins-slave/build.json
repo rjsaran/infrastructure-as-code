@@ -1,0 +1,61 @@
+{
+    "variables" : {
+        "aws_region" : "{{env `AWS_REGION`}}",
+        "jenkins_slave_agent_pub_key": "{{env `JENKINS_SLAVE_AGENT_PUB_KEY`}}"
+    },
+    "builders" : [
+        {
+            "type" : "amazon-ebs",
+            "profile" : "default",
+            "region" : "{{user `aws_region`}}",
+            "instance_type" : "t2.micro",
+            "source_ami" : "{{user `source_ami`}}",
+            "ssh_username" : "ubuntu",
+            "ami_name": "packer-linux-jenkins-slave-{{timestamp}}",
+            "ami_description" : "Amazon Linux Image with Jenkins Slave Server",
+            "source_ami_filter": {
+                "filters": {
+                    "virtualization-type": "hvm",
+                    "name": "ubuntu/images/*ubuntu-xenial-16.04-amd64-server-*",
+                    "root-device-type": "ebs"
+                },
+                "owners": ["099720109477"],
+                "most_recent": true
+            },
+            "run_tags" : {
+                "Name" : "packer-builder-jenkins-slave"
+            },
+            "tags" : {
+                "Tool" : "Packer"
+            }
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "script": "../scripts/install_ansible.sh",
+            "execute_command" : "echo 'packer' | sudo -E -S sh '{{ .Path }}'"
+        },
+        {
+            "type": "ansible-local",
+            "playbook_dir": "../../ansible",
+            "galaxy_file": "../../ansible/roles/jenkins-slave/requirement.yml",
+            "playbook_file": "../../ansible/jenkins-slave.yml"
+        },
+        {
+            "type": "ansible-local",
+            "playbook_dir": "../../ansible",
+            "playbook_file": "../../ansible/users.yml"
+        },
+        {
+            "type" : "file",
+            "source" : "{{user `jenkins_slave_agent_pub_key`}}",
+            "destination" : "/tmp/jenkins_slave_agent_id_rsa.pub"
+        },
+        {
+            "type": "shell",
+            "script": "../scripts/remove_ansible.sh",
+            "execute_command" : "echo 'packer' | sudo -E -S sh '{{ .Path }}'"
+        }
+    ]
+}

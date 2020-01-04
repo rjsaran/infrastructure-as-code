@@ -1,0 +1,40 @@
+---
+- name: Create jenkins group
+  group:
+    name: '{{ jenkins_user }}'
+    state: present
+  become: true
+
+- name: Create jenkins user with root privileges
+  user:
+    name: '{{ jenkins_user }}'
+    group: '{{ jenkins_group }}'
+    state: present
+    append: true
+    createhome: true
+  become: true
+
+- name: Create home directory
+  file:
+    path: '{{ jenkins_home }}'
+    state: directory
+    owner: '{{ jenkins_user }}'
+    group: '{{ jenkins_group }}'
+    mode: 0775
+  become: true
+
+- name: Create .ssh
+  file:
+    path: "{{ jenkins_home }}/.ssh"
+    state: directory
+    mode: 0700
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_group }}"
+
+- name: Set authorized key
+  authorized_key:
+    user: '{{ jenkins_user }}'
+    state: present
+    key: "{{ lookup('file', '{{ jenkins_slave_public_key_file }}') }}"
+  become: true
+  when: jenkins_slave_public_key_file | trim

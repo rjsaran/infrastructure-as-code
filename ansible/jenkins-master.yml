@@ -1,0 +1,15 @@
+- hosts: "{{ target_host }}"
+  become: true
+
+  vars:
+    - target_host: all
+
+  vars_files:
+    ./roles/jenkins-master/vars/plugins.yml
+
+  roles:
+    - role: geerlingguy.jenkins
+      java_packages:
+        - openjdk-8-jdk
+
+    - role: jenkins-master

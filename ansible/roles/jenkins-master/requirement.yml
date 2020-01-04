@@ -1,0 +1,2 @@
+# Jenkins role from Ansible Galaxy
+- src: geerlingguy.jenkins

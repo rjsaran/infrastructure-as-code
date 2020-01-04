@@ -1,3 +1,6 @@
+# Packer Environment File
+.env
+
 # Local .terraform directories
 **/.terraform/*
 

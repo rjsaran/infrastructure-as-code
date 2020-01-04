@@ -1,0 +1,15 @@
+- name: Configure SSH credentitals
+  template:
+    src: setup_credentials.groovy.j2
+    dest: "{{ jenkins_home }}/init.groovy.d/setup_credentials.groovy"
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_group }}"
+    mode: 0775
+
+- name: Disable csrf
+  template:
+    src: setup_csrf.groovy.j2
+    dest: "{{ jenkins_home }}/init.groovy.d/setup_csrf.groovy"
+    owner: "{{ jenkins_user }}"
+    group: "{{ jenkins_group }}"
+    mode: 0775

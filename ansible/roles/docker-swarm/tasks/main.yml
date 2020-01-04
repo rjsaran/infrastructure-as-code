@@ -1,0 +1,8 @@
+---
+- name: Set Docker Swarm Manager Authorized Key (For Jenkins Access)
+  authorized_key:
+    user: 'ubuntu'
+    state: present
+    key: "{{ lookup('file', '{{ docker_swarm_manager_public_key_file }}') }}"
+  become: true
+  when: docker_swarm_manager_public_key_file | trim

@@ -1,0 +1,2 @@
+# Docker role from Ansible Galaxy
+- src: geerlingguy.docker

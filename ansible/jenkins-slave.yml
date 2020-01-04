@@ -1,0 +1,17 @@
+- hosts: "{{ target_host }}"
+  become: true
+  vars:
+    - target_host: all
+
+  roles:
+    - role: geerlingguy.java
+      java_packages:
+        - openjdk-8-jdk
+
+    - role: geerlingguy.docker
+      docker_users:
+        - jenkins
+
+    - role: jenkins-slave
+      vars:
+        jenkins_slave_public_key_file: /tmp/jenkins_slave_agent_id_rsa.pub

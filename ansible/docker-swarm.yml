@@ -1,0 +1,11 @@
+- hosts: "{{ target_host }}"
+  become: true
+  vars:
+    - target_host: all
+
+  roles:
+    - role: geerlingguy.docker
+
+    - role: docker-swarm
+      vars:
+        docker_swarm_manager_public_key_file: /tmp/docker_swarm_manager_id_rsa.pub
