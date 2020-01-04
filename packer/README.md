@@ -22,6 +22,8 @@
     ```
 
 - Build jenkins master image.
+    Few plugins like amazon-ecr, blueocean takes time while installation resulting in build fail. We can skip them by commenting in [file](../ansible/roles/jenkins-master/vars/plugins.yml).
+
     ```sh
     make build-jenkins-master
     ```

@@ -45,6 +45,10 @@
     terraform apply --var-file=variable.tfvars
     ```
 
+- Need to manually setup SSH credentials of Jenkins slave and Docker Swarm cluster if Master is not able to connect to slaves ([Refer](../ansible/roles/jenkins-master/templates/setup_credentials.groovy.j2) for credentials information).
+
+- Install Jenkins Plugins manually if skipped while packer AMI creation.
+
 - Create Jenkins Slave.
     ```sh
     cd terraform/live/mgmt/services/jenkins-slave

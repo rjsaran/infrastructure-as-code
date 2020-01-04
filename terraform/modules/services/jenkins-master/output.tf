@@ -9,3 +9,8 @@ output "security_group_id" {
     description = "The Security Group ID"
     value       = module.jenkins_master_sg.this_security_group_id
 }
+
+output "master_elb_dns" {
+    description = "The ELB DNS Name"
+    value      = module.jenkins_master_elb.this_elb_dns_name
+}
