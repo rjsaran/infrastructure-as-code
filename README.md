@@ -28,5 +28,3 @@ Infrastructure As code Using Ansible, Packer &amp; Terraform
     aws_access_key_id=<AWS_ACCESS_KEY_ID>
     aws_secret_access_key=<AWS_SECRET_ACCESS_KEY>
     ```
-
-Note: all the code in this repo is used only for demonstration and teaching purposes and should not be used in production.s
